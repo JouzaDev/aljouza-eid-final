@@ -4,11 +4,15 @@ import VideoCard from '../components/VideoCard';
 import VideoModal from '../components/VideoModal';
 
 const EID_VIDEOS = [
-  // تأكد من وضع روابط الفيديوهات الصحيحة الخاصة بك هنا
-  { id: 1, title: 'تصميم ذهبي فخم', isFree: true, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/1.mp4' },
-  { id: 2, title: 'تهنئة بخط الثلث', isFree: true, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/2.mp4' },
-  { id: 3, title: 'مخطوطة العيد الملكية', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/3.mp4' },
-  { id: 4, title: 'تصميم كلاسيكي راقي', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/4.mp4' },
+  // الخانات الرمادية المنتظرة للفيديوهات المجانية
+  { id: 1, title: 'تصميم العيد المجاني', isFree: true, isPlaceholder: true },
+  { id: 2, title: 'تهنئة بخط الرقعة', isFree: true, isPlaceholder: true },
+  
+  // الفيديوهات المدفوعة الفعلية (أضف روابط البريفيو الخاصة بك هنا)
+  { id: 3, title: 'تصميم ذهبي فخم', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/1.mp4' },
+  { id: 4, title: 'تهنئة بخط الثلث', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/2.mp4' },
+  { id: 5, title: 'مخطوطة العيد الملكية', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/3.mp4' },
+  { id: 6, title: 'تصميم كلاسيكي راقي', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/4.mp4' },
 ];
 
 export default function Home() {
