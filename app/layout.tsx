@@ -8,15 +8,6 @@ const ibm = IBM_Plex_Sans_Arabic({
   display: 'swap',
 });
 
-import './globals.css';
-import { IBM_Plex_Sans_Arabic } from 'next/font/google';
-
-const ibm = IBM_Plex_Sans_Arabic({ 
-  subsets: ['arabic'],
-  weight: ['300', '400', '500', '600', '700'],
-  display: 'swap',
-});
-
 // التعديل هنا: إضافة أيقونة الإيموجي الاحتفالية
 export const metadata = {
   title: 'أفراح العيد | منصة الجوزاء',

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { Analytics } from "@vercel/analytics/next";
 import VideoCard from '../components/VideoCard';
 import VideoModal from '../components/VideoModal';
 
