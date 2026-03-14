@@ -15,7 +15,7 @@ export default function VideoCard({ title, isFree, price, previewUrl, isPlacehol
   // تصميم خانة "قريباً" الرمادية
   if (isPlaceholder) {
     return (
-      <div className="flex flex-col bg-gray-50/40 backdrop-blur-sm border border-gray-200/60 shadow-sm rounded-[1.5rem] overflow-hidden opacity-80 cursor-default">
+      <div className="flex flex-col bg-gray-50/40 backdrop-blur-sm border border-gray-200/60 shadow-sm rounded-1.5rem overflow-hidden opacity-80 cursor-default">
         <div className="relative w-full aspect-9/16 bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center text-gray-400">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 mb-2 opacity-50">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />

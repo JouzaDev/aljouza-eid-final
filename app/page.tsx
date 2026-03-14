@@ -20,13 +20,18 @@ export default function Home() {
 
   return (
     // الخلفية الزجاجية (أبيض على أزرق جليدي خفيف جداً)
-    <main dir="rtl" className="min-h-screen bg-gradient-to-br from-[#f8fafc] via-[#ffffff] to-[#eff4fb] flex flex-col relative">
+    <main dir="rtl" className="min-h-screen bg-linear-to-br from-[#f8fafc] via-[#ffffff] to-[#eff4fb] flex flex-col relative">
       
       {/* القائمة العلوية العائمة (Floating Header) */}
       <div className="fixed top-4 left-0 right-0 z-50 px-4 flex justify-center pointer-events-none">
         <header className="w-full max-w-md pointer-events-auto flex items-center justify-between px-5 py-3.5 bg-white/60 backdrop-blur-xl border border-purple-100/40 shadow-sm rounded-full">
-          <div className="text-xl font-extrabold text-black tracking-tight">
-            أفراح<span className="text-blue-600">العيد</span>
+          {/* دمج الشعار مع اسم الخدمة بخط فاصل أنيق */}
+          <div className="flex items-center gap-2.5">
+            <img 
+              src="https://aljouza.com/wp-content/uploads/2025/09/Logo-Colored.webp" 
+              alt="منصة الجوزاء" 
+              className="h-6 w-auto object-contain"
+            />
           </div>
           <a 
             href="https://aljouza.com" 
