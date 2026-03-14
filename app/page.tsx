@@ -29,7 +29,7 @@ export default function Home() {
           <div className="flex items-center gap-2.5">
             <img 
               src="https://aljouza.com/wp-content/uploads/2025/09/Logo-Colored.webp" 
-              alt="منصة الجوزاء" 
+              alt="منصة الجوزاء للخدمات التعليمية والرقمية" 
               className="h-6 w-auto object-contain"
             />
           </div>
