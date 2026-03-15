@@ -11,17 +11,27 @@ cloudinary.config({
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    // نستقبل المتغيرات الجديدة: وقت التأخير (delay) واسم الخط (font)
     const { template, text, color, y, size, videoId, delay = 0, font = 'Arial' } = body;
 
-    // 1. إعداد وقت ظهور الاسم (مثلاً بعد 2.5 ثانية)
-    const delayParam = delay > 0 ? `,so_${delay}` : '';
-
-    // 2. إعداد الخط (إذا كان الخط ينتهي بـ .ttf لا نضيف له كلمة bold لأن وزنه مدمج فيه)
+    // 1. تحديد الخط (مخصص أو عادي)
     const textStyle = font.includes('.ttf') ? `${font}_${size}` : `${font}_${size}_bold`;
 
-    // 3. دمج كل شيء في الرابط النهائي
-    const transformation = `l_text:${textStyle}:${text},co_${color},g_center,y_${y}${delayParam}/fl_attachment:Aljouza_Greeting_${videoId}`;
+    // 2. إعداد التوقيت (إذا كان هناك تأخير)
+    const delayParam = delay > 0 ? `,so_${delay}` : '';
+
+    // 🌟 السر هنا: تقسيم الأوامر إلى 3 طبقات صحيحة لـ Cloudinary
+    
+    // الطبقة الأولى: صناعة النص وتلوينه
+    const textLayer = `l_text:${textStyle}:${text},co_${color}`;
+    
+    // الطبقة الثانية: تطبيق النص في مكانه (y) وفي زمانه (so)
+    const applyLayer = `fl_layer_apply,g_center,y_${y}${delayParam}`;
+    
+    // الطبقة الثالثة: أمر التحميل كملف
+    const attachment = `fl_attachment:Aljouza_Greeting_${videoId}`;
+
+    // دمج الطبقات بالشرطة المائلة (/)
+    const transformation = `${textLayer}/${applyLayer}/${attachment}`;
 
     const url = cloudinary.url(template, {
       resource_type: 'video',
