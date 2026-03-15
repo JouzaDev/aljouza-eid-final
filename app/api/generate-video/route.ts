@@ -11,26 +11,26 @@ cloudinary.config({
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { template, text, color, y, size, videoId, delay = 0, font = 'Arial' } = body;
+    // لم نعد نحتاج لاستقبال نوع الخط، سنستخدم Arial المضمون
+    const { template, text, color, y, size, videoId, delay = 0 } = body;
 
-    // 1. تحديد الخط (مخصص أو عادي)
-    const textStyle = font.includes('.ttf') ? `${font}_${size}` : `${font}_${size}_bold`;
+    // 1. تثبيت خط Arial العريض المدمج في Cloudinary
+    const textStyle = `Arial_${size}_bold`;
 
-    // 2. إعداد التوقيت (إذا كان هناك تأخير)
+    // 2. إعداد وقت التأخير (إذا كان موجوداً)
     const delayParam = delay > 0 ? `,so_${delay}` : '';
 
-    // 🌟 السر هنا: تقسيم الأوامر إلى 3 طبقات صحيحة لـ Cloudinary
-    
-    // الطبقة الأولى: صناعة النص وتلوينه
+    // 3. ترتيب الطبقات بشكل مثالي لكي لا يظهر خطأ 400
+    // الطبقة الأولى: كتابة النص
     const textLayer = `l_text:${textStyle}:${text},co_${color}`;
     
-    // الطبقة الثانية: تطبيق النص في مكانه (y) وفي زمانه (so)
+    // الطبقة الثانية: وضع النص في مكانه وتحديد وقت ظهوره
     const applyLayer = `fl_layer_apply,g_center,y_${y}${delayParam}`;
     
-    // الطبقة الثالثة: أمر التحميل كملف
+    // الطبقة الثالثة: التحميل
     const attachment = `fl_attachment:Aljouza_Greeting_${videoId}`;
 
-    // دمج الطبقات بالشرطة المائلة (/)
+    // دمج الطبقات
     const transformation = `${textLayer}/${applyLayer}/${attachment}`;
 
     const url = cloudinary.url(template, {

@@ -10,15 +10,15 @@ import * as arabicReshaper from 'arabic-reshaper';
 // ==========================================
 // إعدادات القوالب الدقيقة الخاصة بك
 const videoSettings: Record<string, { template: string, y: number, color: string, size: number, delay?: number, font?: string }> = {  '1': { template: 'eid-free-greating_s8nxyx', y: 940, color: 'black', size: 70 },
-  '2': { template: 'eid-free-greating0_i96sle', y: 1180, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf'},
-  '3': { template: 'eid-free-greating3_xaiw4a', y: 1180, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf'},
-  '4': { template: 'eid-free-greating4_kfjc4u', y: 950, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf'},
-  '5': { template: 'premium-1_a5n7bh', y: 455, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf'},
-  '6': { template: 'premium-2_iapzey', y: 380, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
-  '7': { template: 'premium-3_t8psna', y: -146, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
-  '8': { template: 'premium-4_zyymt8', y: -6, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
-  '9': { template: 'premium-6_t9ztps', y: 450, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
-  '10': { template: 'premium-5_x4y3vg', y: 380, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
+  '2': { template: 'eid-free-greating0_i96sle', y: 1180, color: 'black', size: 70, delay: 2.5},
+  '3': { template: 'eid-free-greating3_xaiw4a', y: 1180, color: 'black', size: 70, delay: 2.5 },
+  '4': { template: 'eid-free-greating4_kfjc4u', y: 950, color: 'black', size: 70, delay: 2.5},
+  '5': { template: 'premium-1_a5n7bh', y: 455, color: 'black', size: 70, delay: 2.5 },
+  '6': { template: 'premium-2_iapzey', y: 380, color: 'black', size: 70, delay: 2.5 },
+  '7': { template: 'premium-3_t8psna', y: -146, color: 'black', size: 70, delay: 2.5 },
+  '8': { template: 'premium-4_zyymt8', y: -6, color: 'black', size: 70, delay: 2.5 },
+  '9': { template: 'premium-6_t9ztps', y: 450, color: 'black', size: 70, delay: 2.5 },
+  '10': { template: 'premium-5_x4y3vg', y: 380, color: 'black', size: 70, delay: 2.5 },
 };
 // ==========================================
 
