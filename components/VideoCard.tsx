@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { motion } from 'framer-motion';
 
 type VideoCardProps = {
   id: number;
@@ -15,7 +18,13 @@ export default function VideoCard({ title, isFree, price, previewUrl, isPlacehol
   // 1. تصميم خانة "قريباً" الرمادية (في حال إضافة فيديوهات مستقبلية بانتظار التفعيل)
   if (isPlaceholder) {
     return (
-      <div className="flex flex-col bg-gray-50/40 backdrop-blur-sm border border-gray-200/60 shadow-sm rounded-1.5rem overflow-hidden opacity-80 cursor-default">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col bg-gray-50/40 backdrop-blur-sm border border-gray-200/60 shadow-sm rounded-1.5rem overflow-hidden opacity-80 cursor-default"
+      >
         <div className="relative w-full aspect-9/16 bg-linear-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center text-gray-400">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 mb-2 opacity-50">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -31,17 +40,20 @@ export default function VideoCard({ title, isFree, price, previewUrl, isPlacehol
             في الانتظار...
           </button>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   // 2. التصميم الأساسي للفيديوهات المتاحة (المجانية والمدفوعة)
   return (
-    <div 
+    <motion.div 
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       onClick={onClick} 
       className="flex flex-col bg-white/70 backdrop-blur-md border border-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-1.5rem overflow-hidden active:scale-95 transition-all duration-300 cursor-pointer group"
     >
-      {/* منطقة الفيديو */}
       {/* منطقة الفيديو */}
       <div className="relative w-full aspect-9/16 bg-gray-100 overflow-hidden">
         {previewUrl && (
@@ -102,6 +114,6 @@ export default function VideoCard({ title, isFree, price, previewUrl, isPlacehol
           {isFree ? 'اصنع تهنئتك مجاناً' : 'اطلب الآن'}
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
