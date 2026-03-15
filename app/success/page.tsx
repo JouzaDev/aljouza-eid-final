@@ -9,17 +9,16 @@ import * as arabicReshaper from 'arabic-reshaper';
 
 // ==========================================
 // إعدادات القوالب الدقيقة الخاصة بك
-const videoSettings: Record<string, { template: string, y: number, color: string, size: number }> = {
-  '1': { template: 'eid-free-greating_s8nxyx', y: 940, color: 'black', size: 70 },
-  '2': { template: 'eid-free-greating0_i96sle', y: 1180, color: 'black', size: 90 },
-  '3': { template: 'eid-free-greating3_xaiw4a', y: 1180, color: 'black', size: 85 },
-  '4': { template: 'eid-free-greating4_kfjc4u', y: 950, color: 'black', size: 80 },
-  '5': { template: 'premium-1_a5n7bh', y: 455, color: 'black', size: 70 },
-  '6': { template: 'premium-2_iapzey', y: 380, color: 'black', size: 85 },
-  '7': { template: 'premium-3_t8psna', y: -146, color: 'black', size: 80 },
-  '8': { template: 'premium-4_zyymt8', y: -6, color: 'black', size: 75 },
-  '9': { template: 'premium-6_t9ztps', y: 450, color: 'white', size: 80 },
-  '10': { template: 'premium-5_x4y3vg', y: 380, color: 'black', size: 85 },
+const videoSettings: Record<string, { template: string, y: number, color: string, size: number, delay?: number, font?: string }> = {  '1': { template: 'eid-free-greating_s8nxyx', y: 940, color: 'black', size: 70 },
+  '2': { template: 'eid-free-greating0_i96sle', y: 1180, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf'},
+  '3': { template: 'eid-free-greating3_xaiw4a', y: 1180, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf'},
+  '4': { template: 'eid-free-greating4_kfjc4u', y: 950, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf'},
+  '5': { template: 'premium-1_a5n7bh', y: 455, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf'},
+  '6': { template: 'premium-2_iapzey', y: 380, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
+  '7': { template: 'premium-3_t8psna', y: -146, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
+  '8': { template: 'premium-4_zyymt8', y: -6, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
+  '9': { template: 'premium-6_t9ztps', y: 450, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
+  '10': { template: 'premium-5_x4y3vg', y: 380, color: 'black', size: 70, delay: 2.5, font: 'Alyamama-Bold.ttf' },
 };
 // ==========================================
 
@@ -72,7 +71,7 @@ function SuccessContent() {
         const finalName = processArabic(validName.trim());
         const encodedName = encodeURIComponent(finalName);
 
-        const response = await fetch('/api/generate-video', {
+       const response = await fetch('/api/generate-video', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -81,6 +80,8 @@ function SuccessContent() {
             color: config.color,
             y: config.y,
             size: config.size,
+            delay: config.delay || 0,           // سحب التوقيت من الإعدادات
+            font: config.font || 'Arial',       // سحب الخط من الإعدادات
             videoId: currentVideoId
           }),
         });

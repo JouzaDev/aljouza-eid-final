@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 
-// 1. تعريف مفاتيح الوصول لحسابك
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -12,17 +11,23 @@ cloudinary.config({
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { template, text, color, y, size, videoId } = body;
+    // نستقبل المتغيرات الجديدة: وقت التأخير (delay) واسم الخط (font)
+    const { template, text, color, y, size, videoId, delay = 0, font = 'Arial' } = body;
 
-    // 2. 🛠️ الإصلاح هنا: دمجنا أمر (fl_attachment) مع تحويلات النص ليكون في مكانه الصحيح
-    const transformation = `l_text:Arial_${size}_bold:${text},co_${color},g_center,y_${y}/fl_attachment:Aljouza_Greeting_${videoId}`;
+    // 1. إعداد وقت ظهور الاسم (مثلاً بعد 2.5 ثانية)
+    const delayParam = delay > 0 ? `,so_${delay}` : '';
 
-    // 3. نمرر اسم القالب فقط (بدون أي مجلدات وهمية) ونحدد الصيغة mp4
+    // 2. إعداد الخط (إذا كان الخط ينتهي بـ .ttf لا نضيف له كلمة bold لأن وزنه مدمج فيه)
+    const textStyle = font.includes('.ttf') ? `${font}_${size}` : `${font}_${size}_bold`;
+
+    // 3. دمج كل شيء في الرابط النهائي
+    const transformation = `l_text:${textStyle}:${text},co_${color},g_center,y_${y}${delayParam}/fl_attachment:Aljouza_Greeting_${videoId}`;
+
     const url = cloudinary.url(template, {
       resource_type: 'video',
       format: 'mp4',
       raw_transformation: transformation,
-      sign_url: true // الختم السري
+      sign_url: true
     });
 
     return NextResponse.json({ url });
