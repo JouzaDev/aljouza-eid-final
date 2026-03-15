@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Analytics } from "@vercel/analytics/next";
 import VideoCard from '../components/VideoCard';
 import VideoModal from '../components/VideoModal';
+import { motion } from 'framer-motion';
 
 const EID_VIDEOS = [
   // --- الفيديوهات المجانية (4 خانات رمادية بانتظار تفعيلها لاحقاً) ---
@@ -57,10 +58,20 @@ export default function Home() {
         
         {/* العناوين */}
         <section className="px-5 pb-8 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-2">تهاني العيد</h1>
-          <p className="text-sm font-medium text-gray-500 leading-relaxed">
+          {/* منطقة العنوان والوصف مع حركة نعومة الدخول */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }} // يبدأ مخفياً ومرتفعاً للأعلى قليلاً
+          animate={{ opacity: 1, y: 0 }}   // ينزل لمكانه الطبيعي ويظهر
+          transition={{ duration: 0.7, ease: "easeOut" }} // حركة ناعمة تستغرق 0.7 ثانية
+          className="text-center mb-10"
+        >
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+            تهاني العيد
+          </h1>
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
             اختر تصميمك المفضل، أضف لمستك، وشارك الفرحة فوراً.
           </p>
+        </motion.div>
         </section>
 
         {/* شبكة الفيديوهات */}

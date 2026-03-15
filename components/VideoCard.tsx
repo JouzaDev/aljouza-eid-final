@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 
 type VideoCardProps = {
   id: number;
@@ -15,19 +14,11 @@ type VideoCardProps = {
 
 export default function VideoCard({ title, isFree, price, previewUrl, isPlaceholder, onClick }: VideoCardProps) {
   
-  // 1. تصميم خانة "قريباً" 
+  // 1. تصميم خانة "قريباً" الزجاجي
   if (isPlaceholder) {
     return (
-      <motion.div 
-        // حركة ناعمة جداً ومريحة للعين
-        initial={{ opacity: 0, y: 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-10px" }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        // تصحيح الحواف والظلال
-        className="flex flex-col bg-gray-50/50 border border-gray-200 shadow-sm rounded-[24px] overflow-hidden opacity-80 cursor-default"
-      >
-        <div className="relative w-full aspect-9/16 bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center text-gray-400">
+      <div className="flex flex-col bg-gray-50/40 backdrop-blur-xl border border-white/60 shadow-sm rounded-[24px] overflow-hidden opacity-80 cursor-default">
+        <div className="relative w-full aspect-9/16 bg-gradient-to-br from-gray-100/50 to-gray-200/50 flex flex-col items-center justify-center text-gray-400">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 mb-2 opacity-50">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -42,24 +33,19 @@ export default function VideoCard({ title, isFree, price, previewUrl, isPlacehol
             في الانتظار...
           </button>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
-  // 2. التصميم الأساسي للفيديوهات المتاحة
+  // 2. التصميم الأساسي الزجاجي (Apple Style Glassmorphism)
   return (
-    <motion.div 
-      // حركة خفيفة وأنيقة (تلاشي مع صعود بسيط جداً بدون تغيير الحجم)
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-20px" }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+    <div 
       onClick={onClick} 
-      // تم إصلاح الحواف وإضافة ظل ناعم جداً وإطار خفيف
-      className="flex flex-col bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[24px] overflow-hidden active:scale-[0.98] transition-all duration-300 cursor-pointer group"
+      // السر هنا: شفافية 60%، ضبابية عالية، حد أبيض ناعم، وظل خفيف جداً
+      className="flex flex-col bg-white/60 backdrop-blur-xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-[24px] overflow-hidden active:scale-[0.98] transition-all duration-300 cursor-pointer group"
     >
       {/* منطقة الفيديو */}
-      <div className="relative w-full aspect-9/16 bg-gray-50 overflow-hidden">
+      <div className="relative w-full aspect-9/16 bg-gray-50/50 overflow-hidden">
         {previewUrl && (
           <video 
             src={previewUrl} 
@@ -70,20 +56,19 @@ export default function VideoCard({ title, isFree, price, previewUrl, isPlacehol
             onContextMenu={(e) => e.preventDefault()} 
             controlsList="nodownload noplaybackrate" 
             disablePictureInPicture 
-            // حركة تكبير أبطأ وأهدأ عند مرور الماوس
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out select-none pointer-events-none"
           />
         )}
         
         {/* شارة الخصم */}
         {!isFree && (
-          <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold text-red-600 bg-red-50 border border-red-100/50 backdrop-blur-md rounded-lg shadow-sm">
+          <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold text-red-600 bg-white/80 border border-white/50 backdrop-blur-md rounded-lg shadow-sm">
             خصم 85%
           </span>
         )}
         
         {/* شارة التميز */}
-        <span className="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-bold text-gray-800 bg-white/90 border border-gray-100/50 backdrop-blur-md rounded-lg shadow-sm">
+        <span className="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-bold text-gray-800 bg-white/80 border border-white/50 backdrop-blur-md rounded-lg shadow-sm">
           {isFree ? 'مجاني لفترة' : 'متميز'}
         </span>
       </div>
@@ -116,6 +101,6 @@ export default function VideoCard({ title, isFree, price, previewUrl, isPlacehol
           {isFree ? 'اصنع تهنئتك مجاناً' : 'اطلب الآن'}
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
