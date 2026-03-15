@@ -14,15 +14,15 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { template, text, color, y, size, videoId } = body;
 
-    // 2. بناء أوامر الطباعة تماماً كما كانت في صفحتك
-    const transformation = `l_text:Arial_${size}_bold:${text},co_${color},g_center,y_${y}`;
+    // 2. 🛠️ الإصلاح هنا: دمجنا أمر (fl_attachment) مع تحويلات النص ليكون في مكانه الصحيح
+    const transformation = `l_text:Arial_${size}_bold:${text},co_${color},g_center,y_${y}/fl_attachment:Aljouza_Greeting_${videoId}`;
 
-    // 3. 🔒 السحر هنا: إنشاء الرابط وتوقيعه سرياً (الختم)
-    const url = cloudinary.url(`fl_attachment:Aljouza_Greeting_${videoId}/${template}.mp4`, {
+    // 3. نمرر اسم القالب فقط (بدون أي مجلدات وهمية) ونحدد الصيغة mp4
+    const url = cloudinary.url(template, {
       resource_type: 'video',
-      type: 'upload',
+      format: 'mp4',
       raw_transformation: transformation,
-      sign_url: true // هذه التعليمة تضع ختماً مشفراً على الرابط يمنع أي شخص من العبث به
+      sign_url: true // الختم السري
     });
 
     return NextResponse.json({ url });
