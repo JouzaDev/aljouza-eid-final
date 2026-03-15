@@ -35,7 +35,7 @@ export default function VideoModal({ video, onClose }: VideoModalProps) {
             // نقوم بتضمين الاسم ورقم الفيديو في رابط العودة كخطة أمان إضافية
             callback_url: `${window.location.origin}/success?name=${encodeURIComponent(name.trim())}&videoId=${video.id}`,
             
-            methods: ['creditcard', 'stcpay', 'applepay'], 
+            methods: ['creditcard', 'applepay'], 
             apple_pay: { 
               country: 'SA', 
               label: 'منصة الجوزاء - أفراح العيد', 
