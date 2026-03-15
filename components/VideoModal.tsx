@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 type VideoModalProps = {
   video: any;
   onClose: () => void;
+  isOpen?: boolean;
 };
 
 export default function VideoModal({ video, onClose }: VideoModalProps) {
