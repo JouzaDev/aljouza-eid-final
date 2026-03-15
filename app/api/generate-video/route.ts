@@ -11,27 +11,16 @@ cloudinary.config({
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    // لم نعد نحتاج لاستقبال نوع الخط، سنستخدم Arial المضمون
     const { template, text, color, y, size, videoId, delay = 0 } = body;
 
-    // 1. تثبيت خط Arial العريض المدمج في Cloudinary
+    // 1. خط Arial
     const textStyle = `Arial_${size}_bold`;
 
-    // 2. إعداد وقت التأخير (إذا كان موجوداً)
+    // 2. التوقيت
     const delayParam = delay > 0 ? `,so_${delay}` : '';
 
-    // 3. ترتيب الطبقات بشكل مثالي لكي لا يظهر خطأ 400
-    // الطبقة الأولى: كتابة النص
-    const textLayer = `l_text:${textStyle}:${text},co_${color}`;
-    
-    // الطبقة الثانية: وضع النص في مكانه وتحديد وقت ظهوره
-    const applyLayer = `fl_layer_apply,g_center,y_${y}${delayParam}`;
-    
-    // الطبقة الثالثة: التحميل
-    const attachment = `fl_attachment:Aljouza_Greeting_${videoId}`;
-
-    // دمج الطبقات
-    const transformation = `${textLayer}/${applyLayer}/${attachment}`;
+    // 3. 🌟 الحل هنا: دمج كل شيء في سطر واحد مباشر بدون تعقيد الطبقات ليظهر النص فوراً
+    const transformation = `l_text:${textStyle}:${text},co_${color},g_center,y_${y}${delayParam}/fl_attachment:Aljouza_Greeting_${videoId}`;
 
     const url = cloudinary.url(template, {
       resource_type: 'video',

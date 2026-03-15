@@ -6,21 +6,17 @@ import VideoModal from '../components/VideoModal';
 import { motion } from 'framer-motion';
 
 const EID_VIDEOS = [
-  // --- الفيديوهات المجانية (4 خانات رمادية بانتظار تفعيلها لاحقاً) ---
-  { id: 1, title: 'تصميم العيد المجاني 1', isFree: true, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-free-greating.mp4' },
-  { id: 2, title: 'تصميم العيد المجاني 2', isFree: true, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-free-greating0.mp4' },
-  { id: 3, title: 'تصميم العيد المجاني 3', isFree: true, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-free-greating1.mp4' },
-  { id: 4, title: 'تصميم العيد المجاني 4', isFree: true, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-free-greating2.mp4' },
-
+  // --- الفيديوهات المجانية (رقم 1 و 2) ---
+  { id: 1, title: 'اروع تصميم للتهنئة بالعيد', isFree: true, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-free-greating1.mp4' },
+  { id: 2, title: 'تصميم احترافي مجاني', isFree: true, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-free-greating2.mp4' },
   
-  // --- الفيديوهات المدفوعة (6 فيديوهات معتمدة) ---
-  // ملاحظة: قم بتغيير الروابط في previewUrl لتطابق فيديوهات المعاينة الخاصة بك في سابابيس
-  { id: 5, title: 'تصميم ذهبي فخم', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview.mp4' },
-  { id: 6, title: 'تهنئة بخط الثلث', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview0.mp4' },
-  { id: 7, title: 'مخطوطة العيد الملكية', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview1.mp4' },
-  { id: 8, title: 'تصميم كلاسيكي راقي', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview2.mp4' },
-  { id: 9, title: 'مخطوطة ديوانية', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview3.mp4' },
-  { id: 10, title: 'تصميم عصري', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview4.mp4' },
+  // --- الفيديوهات المدفوعة (تم تعديل الأرقام لتصبح متسلسلة من 3 إلى 8 لتطابق صفحة النجاح) ---
+  { id: 3, title: 'تصميم ذهبي فخم', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview.mp4' },
+  { id: 4, title: 'تهنئة بخط الثلث', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview0.mp4' },
+  { id: 5, title: 'مخطوطة العيد الملكية', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview1.mp4' },
+  { id: 6, title: 'تصميم كلاسيكي راقي', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview2.mp4' },
+  { id: 7, title: 'مخطوطة ديوانية', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview3.mp4' },
+  { id: 8, title: 'تصميم عصري', isFree: false, price: 5, previewUrl: 'https://pkemnucxqytzjljvpcab.supabase.co/storage/v1/object/public/eid-previews/eid-greeting-preview4.mp4' },
 ];
 
 export default function Home() {
@@ -57,15 +53,15 @@ export default function Home() {
       <div className="flex-1 w-full max-w-md mx-auto pt-28 pb-10 flex flex-col">
         
         {/* العناوين */}
-        <section className="px-5 pb-8 text-center">
+        <section className="px-7 text-center">
           {/* منطقة العنوان والوصف مع حركة نعومة الدخول */}
         <motion.div 
-          initial={{ opacity: 0, y: -20 }} // يبدأ مخفياً ومرتفعاً للأعلى قليلاً
-          animate={{ opacity: 1, y: 0 }}   // ينزل لمكانه الطبيعي ويظهر
-          transition={{ duration: 0.7, ease: "easeOut" }} // حركة ناعمة تستغرق 0.7 ثانية
+          initial={{ opacity: 0, y: -20 }} 
+          animate={{ opacity: 1, y: 0 }}   
+          transition={{ duration: 0.7, ease: "easeOut" }} 
           className="text-center mb-10"
         >
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+         <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 bg-clip-text text-transparent pb-2 leading-normal">
             تهاني العيد
           </h1>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
@@ -110,6 +106,9 @@ export default function Home() {
         onClose={() => setSelectedVideo(null)} 
         video={selectedVideo} 
       />
+      
+      {/* تشغيل تحليلات Vercel هنا */}
+      <Analytics />
     </main>
   );
 }

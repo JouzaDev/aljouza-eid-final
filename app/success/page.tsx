@@ -1,24 +1,25 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect, useState, Suspense } from 'react'; // أضفنا Suspense هنا
+import { useEffect, useState, Suspense } from 'react';
 
 // @ts-ignore
 import * as arabicReshaper from 'arabic-reshaper';
 
 // ==========================================
 // إعدادات القوالب الدقيقة الخاصة بك
-const videoSettings: Record<string, { template: string, y: number, color: string, size: number, delay?: number, font?: string }> = {  '1': { template: 'eid-free-greating_s8nxyx', y: 940, color: 'black', size: 70 },
-  '2': { template: 'eid-free-greating0_i96sle', y: 1180, color: 'black', size: 70, delay: 2.5},
-  '3': { template: 'eid-free-greating3_xaiw4a', y: 1180, color: 'black', size: 70, delay: 2.5 },
-  '4': { template: 'eid-free-greating4_kfjc4u', y: 950, color: 'black', size: 70, delay: 2.5},
-  '5': { template: 'premium-1_a5n7bh', y: 455, color: 'black', size: 70, delay: 2.5 },
-  '6': { template: 'premium-2_iapzey', y: 380, color: 'black', size: 70, delay: 2.5 },
-  '7': { template: 'premium-3_t8psna', y: -146, color: 'black', size: 70, delay: 2.5 },
-  '8': { template: 'premium-4_zyymt8', y: -6, color: 'black', size: 70, delay: 2.5 },
-  '9': { template: 'premium-6_t9ztps', y: 450, color: 'black', size: 70, delay: 2.5 },
-  '10': { template: 'premium-5_x4y3vg', y: 380, color: 'black', size: 70, delay: 2.5 },
+const videoSettings: Record<string, { template: string, y: number, color: string, size: number, delay?: number, font?: string }
+> = {
+  '1': { template: 'eid-free-greating1_kfjc4u', y: 610, color: 'black', size: 70 },
+  '2': { template: 'eid-free-greating2_xaiw4a', y: 295, color: 'black', size: 70, delay: 2.5 },
+ 
+  '3': { template: 'premium-1_a5n7bh', y: 455, color: 'black', size: 70, delay: 2.5 },
+  '4': { template: 'premium-2_iapzey', y: 160, color: 'black', size: 70, delay: 2.5 },
+  '5': { template: 'premium-3_t8psna', y: -146, color: 'black', size: 70, delay: 2.5 },
+  '6': { template: 'premium-4_zyymt8', y: -6, color: 'black', size: 70, delay: 4.5 },
+  '7': { template: 'premium-6_t9ztps', y: 450, color: 'black', size: 70, delay: 4.5 },
+  '8': { template: 'premium-5_x4y3vg', y: 380, color: 'black', size: 70, delay: 4 },
 };
 // ==========================================
 
@@ -36,6 +37,8 @@ const processArabic = (text: string) => {
 // 1. فصلنا المحتوى الأساسي في دالة خاصة
 function SuccessContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  
   const status = searchParams.get('status');
   const paymentId = searchParams.get('id');
   
@@ -46,6 +49,11 @@ function SuccessContent() {
   const [isGeneratingUrl, setIsGeneratingUrl] = useState(true);
 
   useEffect(() => {
+    // 🛡️ خطوة أمنية: تنظيف الرابط وإخفاء البيانات (اسم، رقم الدفع) من الـ URL بمجرد فتح الصفحة
+    if (window.history.replaceState) {
+      window.history.replaceState(null, '', '/success');
+    }
+
     const localName = localStorage.getItem('customerName');
     const localVideoId = localStorage.getItem('selectedVideoId');
     
@@ -80,8 +88,8 @@ function SuccessContent() {
             color: config.color,
             y: config.y,
             size: config.size,
-            delay: config.delay || 0,           // سحب التوقيت من الإعدادات
-            font: config.font || 'Arial',       // سحب الخط من الإعدادات
+            delay: config.delay || 0,
+            font: config.font || 'Arial',
             videoId: currentVideoId
           }),
         });
@@ -98,17 +106,27 @@ function SuccessContent() {
     };
 
     generateSecureUrl();
-  }, [searchParams]);
+  }, []); // ⚠️ أزلنا searchParams من هنا لكي لا يعيد التشغيل بعد تنظيف الرابط
 
   if (!isReady) return null;
 
-  if (status !== 'paid') {
+  if (status !== 'paid' && !localStorage.getItem('customerName')) {
+    // التعديل هنا: إذا نظفنا الرابط، سنعتمد على localStorage للتأكد أن المستخدم لم يأتِ للصفحة مباشرة
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 text-red-600 font-bold p-6 text-center shadow-inner">
         عذراً، لم نتمكن من العثور على طلبك. يرجى المحاولة من جديد.
       </div>
     );
   }
+
+  // 🔄 دالة زر التحميل: تبدأ التحميل وتعود للرئيسية بعد فترة
+  const handleDownloadAndRedirect = () => {
+    setTimeout(() => {
+      localStorage.removeItem('customerName');
+      localStorage.removeItem('selectedVideoId');
+      router.push('/');
+    }, 4000); // 4 ثوانٍ لضمان بدء المتصفح بتحميل الفيديو
+  };
 
   return (
     <div className="max-w-md w-full bg-white rounded-[2.5rem] p-10 shadow-[0_20px_60px_rgba(0,0,0,0.05)] text-center border border-gray-100 relative overflow-hidden">
@@ -126,7 +144,7 @@ function SuccessContent() {
         {paymentId && paymentId.startsWith('FREE_') ? (
           <span className="inline-block mt-3 px-4 py-1.5 bg-green-50 text-green-700 rounded-full text-sm font-bold">هدايا الجوزاء المجانية 🎁</span>
         ) : (
-          <p className="text-xs text-gray-400 mt-2">رقم التوثيق: {paymentId}</p>
+          <p className="text-xs text-gray-400 mt-2">رقم التوثيق: {paymentId || 'محمي'}</p>
         )}
       </div>
 
@@ -141,6 +159,7 @@ function SuccessContent() {
       ) : (
         <a 
           href={secureDownloadUrl}
+          onClick={handleDownloadAndRedirect}
           className="w-full flex items-center justify-center gap-3 py-4.5 rounded-2xl text-xl font-bold transition-all bg-black text-white hover:bg-gray-800 hover:shadow-2xl hover:scale-[1.03] active:scale-95 mb-4 shadow-xl shadow-black/10 group"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 group-hover:animate-bounce">

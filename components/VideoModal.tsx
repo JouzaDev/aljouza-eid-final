@@ -157,13 +157,13 @@ export default function VideoModal({ video, onClose }: VideoModalProps) {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="مثال: أحمد الدوسري"
+                    placeholder="مثال: صالح الدوسري"
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-400 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all font-medium text-gray-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">رقم الجوال (لإرسال نسخة احتياطية)</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">رقم الجوال </label>
                   <input
                     type="tel"
                     value={phone}
