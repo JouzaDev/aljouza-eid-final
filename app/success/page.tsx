@@ -1,120 +1,171 @@
-"use client";
-import React, { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+'use client';
 
-function SuccessContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  
-  const [downloadLink, setDownloadLink] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import * as arabicReshaper from 'arabic-reshaper';
 
-  useEffect(() => {
-    const paymentId = searchParams.get('id');
-    const status = searchParams.get('status');
-    const savedOrder = localStorage.getItem('eid_pending_order');
+// ==========================================
+// 1. إعدادات القوالب الدقيقة الخاصة بك (لم نلمسها أبداً)
+const videoSettings: Record<string, { template: string, y: number, color: string, size: number }> = {
+  '1': { template: 'eid-free-greating_s8nxyx', y: 940, color: 'black', size: 70 },
+  '2': { template: 'eid-free-greating0_i96sle', y: 1180, color: 'black', size: 90 },
+  '3': { template: 'eid-free-greating3_xaiw4a', y: 1180, color: 'black', size: 85 },
+  '4': { template: 'eid-free-greating4_kfjc4u', y: 950, color: 'black', size: 80 },
+  '5': { template: 'premium-1_a5n7bh', y: 455, color: 'black', size: 70 },
+  '6': { template: 'premium-2_iapzey', y: 380, color: 'black', size: 85 },
+  '7': { template: 'premium-3_t8psna', y: -146, color: 'black', size: 80 },
+  '8': { template: 'premium-4_zyymt8', y: -6, color: 'black', size: 75 },
+  '9': { template: 'premium-6_t9ztps', y: 450, color: 'white', size: 80 },
+  '10': { template: 'premium-5_x4y3vg', y: 380, color: 'black', size: 85 },
+};
+// ==========================================
 
-    // التحقق من وجود الطلب في الذاكرة
-    if (!savedOrder) {
-      setError('لا توجد بيانات للطلب الحالي. قد تكون الجلسة انتهت.');
-      setIsLoading(false);
-      return;
-    }
-
-    const orderData = JSON.parse(savedOrder);
-
-    // إذا كانت العملية مجانية أو مدفوعة بنجاح
-    if (orderData.video.isFree || status === 'paid') {
-      fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          payment_id: paymentId || 'free_transaction',
-          video_id: orderData.video.id,
-          name: orderData.name,
-          phone: orderData.phone
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.downloadUrl) {
-          setDownloadLink(data.downloadUrl);
-          localStorage.removeItem('eid_pending_order'); // تنظيف الذاكرة
-        } else {
-          setError('حدث خطأ أثناء تجهيز الرابط. يرجى التواصل مع الدعم.');
-        }
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setError('خطأ في الاتصال بالخادم. يرجى المحاولة مرة أخرى.');
-        setIsLoading(false);
-      });
-    } else {
-      setError('لم تكتمل عملية الدفع بنجاح.');
-      setIsLoading(false);
-    }
-  }, [searchParams]);
-
-  return (
-    <main dir="rtl" className="min-h-screen bg-[#F2F2F7] flex flex-col items-center justify-center p-4 font-sans">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-sm p-8 text-center">
-        
-        {isLoading ? (
-          <div className="animate-pulse space-y-4">
-            <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto"></div>
-            <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto"></div>
-            <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
-          </div>
-        ) : error ? (
-          <div className="space-y-4">
-            <div className="w-20 h-20 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-            </div>
-            <h2 className="text-2xl font-bold text-black">عذراً!</h2>
-            <p className="text-gray-500">{error}</p>
-            <button onClick={() => router.push('/')} className="mt-6 w-full py-4 font-semibold text-blue-600 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors">
-              العودة للرئيسية
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-10 h-10"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-            </div>
-            <h2 className="text-3xl font-bold text-black tracking-tight">تهانينا!</h2>
-            <p className="text-gray-500 leading-relaxed">
-              تم تجهيز فيديو التهنئة الخاص بك بنجاح وهو الآن جاهز للتحميل بجودة عالية.
-            </p>
-            
-            <a href={downloadLink} download="Eid-Greeting.mp4" className="w-full py-4 font-semibold text-white bg-blue-600 rounded-2xl hover:bg-blue-700 transition-colors flex justify-center items-center shadow-sm">
-              تحميل الفيديو الآن (متاح لدقيقتين)
-            </a>
-          </div>
-        )}
-      </div>
-
-      {/* قسم الخدمات الإضافية (Apple HIG Style Card) */}
-      {!isLoading && !error && (
-        <div className="w-full max-w-md mt-6 bg-white rounded-3xl shadow-sm p-6 flex flex-col items-center border border-gray-100">
-          <h3 className="text-lg font-bold text-black mb-2">تبحث عن تصميم خاص؟</h3>
-          <p className="text-sm text-gray-500 text-center mb-5">
-            نقدم خدمات تصميم الفيديوهات والموشن جرافيك المخصصة للشركات والأفراد لتناسب هويتك بدقة.
-          </p>
-          <a href="https://wa.me/966500000000" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 font-semibold text-black bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors flex justify-center items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.84 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" /></svg>
-            تواصل معنا عبر واتساب
-          </a>
-        </div>
-      )}
-    </main>
-  );
-}
+// 2. دالة معالجة اللغة العربية الذكية والمختصرة
+const processArabic = (text: string) => {
+  try {
+    // @ts-ignore
+    const reshapeMethod = arabicReshaper.reshape || (arabicReshaper.default && arabicReshaper.default.reshape);
+    return typeof reshapeMethod === 'function' ? reshapeMethod(text) : text;
+  } catch (e) {
+    console.error("Arabic Processing Error:", e);
+    return text;
+  }
+};
 
 export default function SuccessPage() {
+  const searchParams = useSearchParams();
+  const status = searchParams.get('status');
+  const paymentId = searchParams.get('id');
+  
+  const [customerName, setCustomerName] = useState('ضيفنا الكريم');
+  const [isReady, setIsReady] = useState(false);
+  
+  // 🔒 حالات جديدة لاستقبال الرابط الآمن وحالة التحميل
+  const [secureDownloadUrl, setSecureDownloadUrl] = useState('');
+  const [isGeneratingUrl, setIsGeneratingUrl] = useState(true);
+
+  useEffect(() => {
+    // سحب البيانات من الذاكرة للحفاظ على نظافة الاسم
+    const localName = localStorage.getItem('customerName');
+    const localVideoId = localStorage.getItem('selectedVideoId');
+    
+    let validName = 'ضيفنا الكريم';
+
+    if (localName) {
+      validName = localName;
+    } else {
+      const urlName = searchParams.get('name');
+      if (urlName) {
+        try { validName = decodeURIComponent(urlName); } 
+        catch (e) { validName = urlName; }
+      }
+    }
+
+    setCustomerName(validName);
+    const currentVideoId = localVideoId || searchParams.get('videoId') || '1';
+    setIsReady(true);
+
+    // 🔒 استدعاء حارس الأمن (السيرفر) لإنتاج الرابط المختوم بدلاً من بنائه هنا
+    const generateSecureUrl = async () => {
+      try {
+        const config = videoSettings[currentVideoId] || videoSettings['1'];
+        const finalName = processArabic(validName.trim());
+        const encodedName = encodeURIComponent(finalName);
+
+        // إرسال البيانات للـ API الخاص بنا
+        const response = await fetch('/api/generate-video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            template: config.template,
+            text: encodedName,
+            color: config.color,
+            y: config.y,
+            size: config.size,
+            videoId: currentVideoId
+          }),
+        });
+
+        const data = await response.json();
+        if (data.url) {
+          setSecureDownloadUrl(data.url); // حفظ الرابط المختوم في الزر
+        }
+      } catch (error) {
+        console.error("Error fetching secure URL:", error);
+      } finally {
+        setIsGeneratingUrl(false); // إيقاف علامة التحميل
+      }
+    };
+
+    generateSecureUrl();
+  }, [searchParams]);
+
+  if (!isReady) return null;
+
+  if (status !== 'paid') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-red-600 font-bold p-6 text-center shadow-inner">
+        عذراً، لم نتمكن من العثور على طلبك. يرجى المحاولة من جديد.
+      </div>
+    );
+  }
+
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F2F2F7] flex items-center justify-center">جاري التحميل...</div>}>
-      <SuccessContent />
-    </Suspense>
+    <div className="min-h-screen bg-[#FDFDFD] flex items-center justify-center p-4" dir="rtl">
+      <div className="max-w-md w-full bg-white rounded-[2.5rem] p-10 shadow-[0_20px_60px_rgba(0,0,0,0.05)] text-center border border-gray-100 relative overflow-hidden">
+        
+        <div className="absolute top-0 right-0 w-32 h-32 bg-green-50/50 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+        
+        <div className="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm border border-green-100">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-12 h-12">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </div>
+
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-3 tracking-tight">مبارك عليك العيد يا {customerName}!</h1>
+        
+        <div className="text-gray-500 mb-10 leading-relaxed">
+          <p className="text-lg">تهنئتك من <span className="font-bold text-blue-600">منصة الجوزاء</span> أصبحت جاهزة.</p>
+          {paymentId && paymentId.startsWith('FREE_') ? (
+            <span className="inline-block mt-3 px-4 py-1.5 bg-green-50 text-green-700 rounded-full text-sm font-bold">هدايا الجوزاء المجانية 🎁</span>
+          ) : (
+            <p className="text-xs text-gray-400 mt-2">رقم التوثيق: {paymentId}</p>
+          )}
+        </div>
+
+        {/* 🔒 زر التحميل الذكي: يظهر حالة تحميل حتى يصل الرابط المشفر */}
+        {isGeneratingUrl ? (
+          <button disabled className="w-full flex items-center justify-center gap-3 py-4.5 rounded-2xl text-xl font-bold transition-all bg-gray-200 text-gray-500 cursor-not-allowed mb-4 shadow-inner">
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            جاري تجهيز الرابط الآمن...
+          </button>
+        ) : (
+          <a 
+            href={secureDownloadUrl}
+            className="w-full flex items-center justify-center gap-3 py-4.5 rounded-2xl text-xl font-bold transition-all bg-black text-white hover:bg-gray-800 hover:shadow-2xl hover:scale-[1.03] active:scale-95 mb-4 shadow-xl shadow-black/10 group"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 group-hover:animate-bounce">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            حفظ الفيديو
+          </a>
+        )}
+
+        <Link 
+          href="/" 
+          onClick={() => {
+            localStorage.removeItem('customerName');
+            localStorage.removeItem('selectedVideoId');
+          }}
+          className="block mt-6 text-sm font-bold text-gray-400 hover:text-gray-700 transition-colors"
+        >
+          العودة للرئيسية
+        </Link>
+      </div>
+    </div>
   );
 }
